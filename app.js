@@ -19,7 +19,8 @@ var app = express();
 bitcoinapi.setWalletDetails(settings.wallet);
 if (settings.heavy != true) {
   bitcoinapi.setAccess('only', ['getinfo', 'getnetworkhashps', 'getmininginfo', 'getdifficulty', 'getconnectioncount',
-    'getblockcount', 'getblockhash', 'getblock', 'getrawtransaction', 'getpeerinfo', 'gettxoutsetinfo', 'verifymessage']);
+    'getblockcount', 'getblockhash', 'getblock', 'getrawtransaction', 'getpeerinfo', 'gettxoutsetinfo', 'verifymessage',
+    'getdescriptorinfo', 'deriveaddresses']);
 } else {
   // enable additional heavy api calls
   /*
@@ -36,7 +37,7 @@ if (settings.heavy != true) {
   bitcoinapi.setAccess('only', ['getinfo', 'getstakinginfo', 'getnetworkhashps', 'getdifficulty', 'getconnectioncount',
     'getblockcount', 'getblockhash', 'getblock', 'getrawtransaction', 'getmaxmoney', 'getvote',
     'getmaxvote', 'getphase', 'getreward', 'getnextrewardestimate', 'getnextrewardwhenstr',
-    'getnextrewardwhensec', 'getsupply', 'gettxoutsetinfo', 'verifymessage']);
+    'getnextrewardwhensec', 'getsupply', 'gettxoutsetinfo', 'verifymessage', 'getdescriptorinfo', 'deriveaddresses']);
 }
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -57,29 +58,6 @@ app.use('/ext/getmoneysupply', function(req,res){
     res.send(' '+supply);
   });
 });
-
-
-
-app.use('/stats/getcurrentsupply', function(req,res){
-       var base_url = 'http://127.0.0.1:' + settings.port + '/api/';
-       var uri = base_url + 'gettxoutsetinfo';
-       request({uri: uri, json: true}, function (error, response, body) {
-
-       console.log(body[req.query.q]);
-       var total = body[req.query.q];
-
-      res.send(total);
-   });
-});
-
-
-app.use('/stats/getmaxsupply', function(req,res){
-      console.log(settings[req.query.q]);
-      var mx = settings[req.query.q];
-      res.send(mx.toString());
-});
-
-
 
 app.use('/ext/getaddress/:hash', function(req,res){
   db.get_address(req.params.hash, function(address){
@@ -346,17 +324,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-// HTTPS
-var fs = require('fs');
-const https = require('https');
-const options = {
-    //key: fs.readFileSync('/home/whive/explorer/privkey.pem'),
-    //cert: fs.readFileSync('/home/whive/explorer/fullchain.pem'),
-    key: fs.readFileSync('/etc/letsencrypt/live/whiveexplorer.cointest.com/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/whiveexplorer.cointest.com/fullchain.pem'),
-};
-var httpsServer = https.createServer(options, app)
-httpsServer.listen(8443);
 
 module.exports = app;

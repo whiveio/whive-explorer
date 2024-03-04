@@ -234,6 +234,7 @@ is_locked(function (exists) {
           var complete = 0;
           for (var x = 0; x < markets.length; x++) {
             var market = markets[x];
+		  console.log("MARK:", market)
             db.check_market(market, function(mkt, exists) {
               if (exists) {
                 db.update_markets_db(mkt, function(err) {

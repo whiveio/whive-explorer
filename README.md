@@ -34,6 +34,9 @@ Create user with read/write access:
 
     > db.addUser( { user: "username", pwd: "password", roles: [ "readWrite"] })
 
+
+db.createCollection("collection_new", { capped : true, size : 5242880, max : 5000 } );
+
 ### Get the source
 
     git clone https://github.com/iquidus/explorer explorer

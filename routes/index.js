@@ -130,6 +130,24 @@ function route_get_claim_form(res, hash){
   });
 }
 
+
+//Redirect to https
+router.get('*', function(req, res, next) {
+        if(req.secure){
+          //If IP redirect to url
+          if (req.headers.host != 'whiveexplorer.cointest.com'){
+                 console.log('redirectIP', 'TLS Website started on ' +  ':' + req.headers.host);
+                 return res.redirect(301, 'https://whiveexplorer.cointest.com');
+          }
+          else
+           // OK, continue
+           return next();
+        };
+        //res.redirect('https://' + req.headers.host + req.url);
+        res.redirect('https://' + 'whiveexplorer.cointest.com' + req.url);
+})
+
+
 /* GET home page. */
 router.get('/', function(req, res) {
   route_get_index(res, null);

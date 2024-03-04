@@ -45,14 +45,17 @@ mongoose.connect(dbString, function(err) {
             // peer already exists
             loop.next();
           } else {
-            request({uri: 'https://reallyfreegeoip.org/json/' + address, json: true}, function (error, response, geo) {
+          //request({uri: 'https://reallyfreegeoip.org/json/' + address, json: true}, function (error, response, geo) {
+            request({uri: 'http://ip-api.com/json/' + address, json: true}, function (error, response, geo) {
               db.create_peer({
                 address: address,
                 port: port,
                 protocol: body[i].version,
                 version: body[i].subver.replace('/', '').replace('/', ''),
-                country: geo.country_name,
-                country_code: geo.country_code
+                //country: geo.country_name,
+                //country_code: geo.country_code
+                country: geo.country,
+                country_code: geo.countryCode
               }, function(){
                 loop.next();
               });

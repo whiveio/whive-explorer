@@ -66,6 +66,21 @@ block content
                 br
                 a(href='/api/getnetworkhashps') #{address}/api/getnetworkhashps
 
+            li
+              p
+                strong getcurrentsupply
+                br
+                em Returns current token supply
+                br
+                a(href='/stats/getcurrentsupply?q=total_amount') #{address}/stats/getcurrentsupply?q=total_amount
+
+            li
+              p
+                strong getmaxsupply
+                br
+                em Returns maximum token supply
+                br
+                a(href='/stats/getmaxsupply?q=maxsupply') #{address}/stats/maxsupply?q=maxsupply
 
 
           if(settings.heavy)

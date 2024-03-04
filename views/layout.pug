@@ -32,7 +32,7 @@ html
             var diffString = json.data[0].difficulty;
             var hashrateString = json.data[0].hashrate;
             if (!isNaN(json.data[0].difficulty)) {
-              diffString = parseFloat(json.data[0].difficulty).toFixed(2);
+              diffString = parseFloat(json.data[0].difficulty).toFixed(8);
             }
             if (!isNaN(json.data[0].supply)) {
               supplyString = parseInt(parseFloat(json.data[0].supply).toFixed(0)).toLocaleString('en');
@@ -46,6 +46,7 @@ html
             $("#hashrate").text(hashrateString);
             $("#lastPrice").text(parseFloat(json.data[0].lastPrice).toFixed(8) + ' #{settings.markets.exchange}'.toUpperCase());
             $("#marketCap").text((parseFloat(json.data[0].lastPrice).toFixed(8) * parseInt(parseFloat(json.data[0].supply).toFixed(0))).toLocaleString('en') + ' #{settings.markets.exchange}'.toUpperCase());
+            $("#marketCapUSD").text((parseFloat(json.data[0].lastPrice).toFixed(8) * parseInt(parseFloat(json.data[0].supply).toFixed(0))).toLocaleString('en'));
             $("#lblConnections").text(json.data[0].connections + ' connections');
             $("#lblBlockcount").text(json.data[0].blockcount + ' blocks');
             $("#lblX1").text(' ');
@@ -73,6 +74,12 @@ html
       .header-icons {
         margin: 0 3px;
       }
+
+    meta(name='description', content=  'Whive is a secure online platform for  holding, transferring, and storing digital value.')
+    meta(property='og:image', content='https://whiveexplorer.cointest.com/images/whive.png')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+
+
   body
     - function format_unixtime(unixtime) {
       - var a = new Date(unixtime*1000);
@@ -125,7 +132,9 @@ html
           if typeof settings.headerlogo !== "undefined" && settings.headerlogo && settings.headerlogo.length > 1
             img(src=settings.headerlogo, style='width:153px;height:45px;')
           else
-            =settings.title
+          strong
+              .row.text-center(style='margin-top:1px;margin-bottom:1px;margin-left:2px;color:rgba(255,243,5,.99)')
+                span.menu-text #{settings.title}
       .collapse.navbar-collapse(id='navbar-collapse')
         ul.navbar-nav.mr-auto
           li#home
@@ -150,7 +159,8 @@ html
           if settings.display.richlist == true
             li#richlist
               a.nav-link(href='/richlist')
-                span.fa.fa-btc
+                //span.fa.fa-btc
+                img(src=settings.logo, style='margin-top:-5px;height:15px;')
                 span.menu-text #{settings.locale.menu_richlist}
           if settings.display.markets == true
             li#markets
@@ -242,6 +252,14 @@ html
             .card-body
               label#marketCap -
 
+      .row.text-center.h5(style='margin-top:10px;margin-bottom:20px;color:rgba(255,243,5,.99)')
+              .col-md-12
+                 .row.text-center.d-flex.justify-content-center
+                     strong $WHIVE MARKETCAP 
+                         label ($
+                         label#marketCapUSD -
+                         label )
+
       .row.text-center(style='margin-top:10px;margin-bottom:20px;')
         form.form-inline.col-12.d-flex.justify-content-center(method='post', action='/search')
           #index-search.form-group.d-flex.justify-content-center
@@ -268,9 +286,14 @@ html
               li.pull-left
                 a#youtube-icon.nav-link.social-link(href="https://www.youtube.com/channel/"+settings.youtube, target='_blank')
                   span.glyphicon.fa.fa-youtube
+
+        ul.nav.justify-content-left
+          li.pull-left
+          <a href="http://cointest.com" target="_blank" style="color:white;">©️ 2021 CoinTest.com |  </a>  <a href="http://cointest.com/terms-conditions/" target="_blank" style="color:white;">Terms & Conditions | </a>  <a href="http://cointest.com/disclaimer/" target="_blank" style="color:white;">Disclaimer | </a>  <a href="https://cointest.com/privacy-policy/" target="_blank" style="color:white;">Privacy Policy</a>
+
       .col-md-4.navbar-nav
         ul.nav.justify-content-center
-          li.text-center(style='margin-left:80px;margin-right:80px;')
+        li.text-center(style='margin-left:80px;margin-right:80px;')
             p(style='')
               a.nav-link.poweredby(href='https://github.com/iquidus/explorer', target='_blank') Powered by Iquidus Explorer v#{settings.iquidus_version}
       .col-md-4.navbar-nav

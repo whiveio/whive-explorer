@@ -59,6 +59,28 @@ app.use('/ext/getmoneysupply', function(req,res){
   });
 });
 
+
+app.use('/stats/getcurrentsupply', function(req,res){
+       var base_url = 'http://127.0.0.1:' + settings.port + '/api/';
+       var uri = base_url + 'gettxoutsetinfo';
+       request({uri: uri, json: true}, function (error, response, body) {
+
+       console.log(body[req.query.q]);
+       var total = body[req.query.q];
+
+      res.send(total);
+   });
+});
+
+
+app.use('/stats/getmaxsupply', function(req,res){
+      console.log(settings[req.query.q]);
+      var mx = settings[req.query.q];
+      res.send(mx.toString());
+});
+
+
+
 app.use('/ext/getaddress/:hash', function(req,res){
   db.get_address(req.params.hash, function(address){
     db.get_address_txs_ajax(req.params.hash, 0, settings.txcount, function(txs, count){
@@ -324,5 +346,20 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
+
+
+
+// HTTPS
+var fs = require('fs');
+const https = require('https');
+const options = {
+    //set key and cert
+    key: fs.readFileSync(''),
+    cert: fs.readFileSync(''),
+};
+var httpsServer = https.createServer(options, app)
+//set port
+httpsServer.listen();
+
 
 module.exports = app;
